@@ -1,0 +1,48 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { loginRequest } from "./Login.model";
+
+export function useLoginViewModel() {
+  const router = useRouter();
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
+
+  const onChange = (e) => {
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+    setErrors((er) => ({ ...er, [e.target.name]: "" }));
+  };
+
+  const validate = () => {
+    const next = {};
+    if (!form.email) next.email = "Email is required.";
+    else if (!/\S+@\S+\.\S+/.test(form.email))
+      next.email = "Enter a valid email.";
+    if (!form.password) next.password = "Password is required.";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setServerError("");
+    if (!validate()) return;
+
+    setLoading(true);
+    try {
+      const { user } = await loginRequest(form);
+      router.push(
+        user.role === "admin" ? "/admin/dashboard" : "/user/dashboard",
+      );
+    } catch (err) {
+      setServerError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { form, errors, loading, serverError, onChange, onSubmit };
+}
