@@ -1,4 +1,6 @@
-import EditTaskView from '@/screens/admin/Tasks/EditTask/EditTask.view';
-export default function EditTaskPage({ params }) {
-  return <EditTaskView taskId={params.taskId} />;
+import EditTaskView from "@/screens/admin/Tasks/EditTask/EditTask.view";
+
+export default async function Page({ params }) {
+  const { taskId } = await params;
+  return <EditTaskView taskId={taskId} />;
 }

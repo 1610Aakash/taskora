@@ -1,14 +1,13 @@
-const priorityStyles = {
-  low: 'bg-success/20 text-success',
-  medium: 'bg-warning/20 text-warning',
-  high: 'bg-danger/20 text-danger',
-};
+import { Flag } from "lucide-react";
+
+const STYLES = { low: "text-muted", medium: "text-info", high: "text-warning", urgent: "text-danger" };
+const LABELS = { low: "Low", medium: "Medium", high: "High", urgent: "Urgent" };
 
 export default function PriorityTag({ priority }) {
-  const style = priorityStyles[priority] || 'bg-muted/20 text-muted';
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${style}`}>
-      {priority}
+    <span className={`inline-flex items-center gap-1 text-xs font-medium ${STYLES[priority] || STYLES.low}`}>
+      <Flag className="h-3 w-3" />
+      {LABELS[priority] || priority}
     </span>
   );
 }

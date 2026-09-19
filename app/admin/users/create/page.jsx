@@ -1,4 +1,5 @@
-import CreateUserView from '@/screens/admin/Users/CreateUser/CreateUser.view';
-export default function CreateUserPage() {
+import CreateUserView from "@/screens/admin/Users/CreateUser/CreateUser.view";
+
+export default function Page() {
   return <CreateUserView />;
 }

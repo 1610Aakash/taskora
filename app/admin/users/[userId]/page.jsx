@@ -1,4 +1,6 @@
-import UserDetailsView from '@/screens/admin/Users/UserDetails/UserDetails.view';
-export default function UserDetailsPage({ params }) {
-  return <UserDetailsView userId={params.userId} />;
+import UserDetailsView from "@/screens/admin/Users/UserDetails/UserDetails.view";
+
+export default async function Page({ params }) {
+  const { userId } = await params;
+  return <UserDetailsView userId={userId} />;
 }

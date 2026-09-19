@@ -1,4 +1,6 @@
-import AdminTaskDetailsView from '@/screens/admin/Tasks/TaskDetails/TaskDetails.view';
-export default function AdminTaskDetailsPage({ params }) {
-  return <AdminTaskDetailsView taskId={params.taskId} />;
+import AdminTaskDetailsView from "@/screens/admin/Tasks/TaskDetails/TaskDetails.view";
+
+export default async function Page({ params }) {
+  const { taskId } = await params;
+  return <AdminTaskDetailsView taskId={taskId} />;
 }
