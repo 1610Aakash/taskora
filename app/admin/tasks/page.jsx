@@ -1,4 +1,5 @@
-import TaskListView from '@/screens/admin/Tasks/TaskList/TaskList.view';
-export default function TasksPage() {
-  return <TaskListView />;
+import AdminTaskListView from "@/screens/admin/Tasks/TaskList/TaskList.view";
+
+export default function Page() {
+  return <AdminTaskListView />;
 }

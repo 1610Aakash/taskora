@@ -1,23 +1,23 @@
-const statusStyles = {
-  todo: 'bg-muted/20 text-muted',
-  in_progress: 'bg-info/20 text-info',
-  done: 'bg-success/20 text-success',
-  cancelled: 'bg-danger/20 text-danger',
+const STYLES = {
+  todo: "bg-muted/15 text-muted",
+  "in-progress": "bg-info/15 text-info",
+  completed: "bg-success/15 text-success",
+  "on-hold": "bg-warning/15 text-warning",
 };
 
-const statusLabels = {
-  todo: 'To Do',
-  in_progress: 'In Progress',
-  done: 'Done',
-  cancelled: 'Cancelled',
+const LABELS = {
+  todo: "To Do",
+  "in-progress": "In Progress",
+  completed: "Completed",
+  "on-hold": "On Hold",
 };
 
 export default function StatusBadge({ status }) {
-  const style = statusStyles[status] || 'bg-muted/20 text-muted';
-  const label = statusLabels[status] || status;
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${style}`}>
-      {label}
+    <span
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STYLES[status] || STYLES.todo}`}
+    >
+      {LABELS[status] || status}
     </span>
   );
 }
