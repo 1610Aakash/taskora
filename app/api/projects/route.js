@@ -5,12 +5,27 @@ import { requireAuth } from "@/lib/auth/requireAuth";
 import { success, error } from "@/lib/utils/apiResponse";
 
 export async function GET() {
-  const { error: authError, status } = await requireAuth(["admin", "user"]);
+  const {
+    user,
+    error: authError,
+    status,
+  } = await requireAuth(["admin", "user"]);
   if (authError) return error(authError, status);
 
   await connectDB();
 
-  const projects = await Project.find().sort({ createdAt: -1 }).lean();
+  let query = {};
+
+  if (user.role === "user") {
+    // A user is only "on" a project if the admin has assigned them at least one task in it.
+    const assignedProjectIds = await Task.distinct("project", {
+      assignedUser: user._id,
+    });
+    query = { _id: { $in: assignedProjectIds } };
+  }
+  // admin: no filter — sees every project
+
+  const projects = await Project.find(query).sort({ createdAt: -1 }).lean();
 
   const withCounts = await Promise.all(
     projects.map(async (p) => {

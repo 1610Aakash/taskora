@@ -5,7 +5,11 @@ import { requireAuth } from "@/lib/auth/requireAuth";
 import { success, error } from "@/lib/utils/apiResponse";
 
 export async function GET(request, { params }) {
-  const { error: authError, status } = await requireAuth(["admin", "user"]);
+  const {
+    user,
+    error: authError,
+    status,
+  } = await requireAuth(["admin", "user"]);
   if (authError) return error(authError, status);
 
   const { projectId } = await params;
@@ -13,6 +17,15 @@ export async function GET(request, { params }) {
 
   const project = await Project.findById(projectId).lean();
   if (!project) return error("Project not found.", 404);
+
+  if (user.role === "user") {
+    const hasTaskHere = await Task.exists({
+      project: projectId,
+      assignedUser: user._id,
+    });
+    if (!hasTaskHere)
+      return error("You do not have access to this project.", 403);
+  }
 
   const taskCount = await Task.countDocuments({ project: projectId });
   const completedCount = await Task.countDocuments({
@@ -54,7 +67,7 @@ export async function DELETE(request, { params }) {
   const project = await Project.findById(projectId);
   if (!project) return error("Project not found.", 404);
 
-  await Task.deleteMany({ project: projectId }); // cascade delete tasks under this project
+  await Task.deleteMany({ project: projectId });
   await project.deleteOne();
 
   return success({ message: "Project deleted." });
