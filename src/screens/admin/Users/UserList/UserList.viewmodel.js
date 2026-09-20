@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { getUsersRequest } from "./UserList.model";
 
 export function useUserListViewModel() {
@@ -11,34 +11,21 @@ export function useUserListViewModel() {
 
   useEffect(() => {
     let cancelled = false;
-    getUsersRequest().then((data) => {
-      if (!cancelled) {
-        setUsers(data);
-        setLoading(false);
-      }
-    });
+    setLoading(true);
+    const timeout = setTimeout(() => {
+      getUsersRequest({ status: statusFilter, search }).then((data) => {
+        if (!cancelled) {
+          setUsers(data);
+          setLoading(false);
+        }
+      });
+    }, 300); // debounce while typing
+
     return () => {
       cancelled = true;
+      clearTimeout(timeout);
     };
-  }, []);
+  }, [statusFilter, search]);
 
-  const filtered = useMemo(() => {
-    return users.filter((u) => {
-      const matchesStatus = statusFilter === "all" || u.status === statusFilter;
-      const matchesSearch =
-        !search ||
-        u.fullName.toLowerCase().includes(search.toLowerCase()) ||
-        u.email.toLowerCase().includes(search.toLowerCase());
-      return matchesStatus && matchesSearch;
-    });
-  }, [users, search, statusFilter]);
-
-  return {
-    users: filtered,
-    loading,
-    search,
-    setSearch,
-    statusFilter,
-    setStatusFilter,
-  };
+  return { users, loading, search, setSearch, statusFilter, setStatusFilter };
 }

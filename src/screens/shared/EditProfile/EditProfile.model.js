@@ -1,14 +1,12 @@
+import { apiGet, apiPatch } from "@/lib/api/client";
+import { normalizeUser } from "@/lib/utils/normalize";
+
 export async function getProfileRequest() {
-  await new Promise((r) => setTimeout(r, 700));
-  return {
-    fullName: "Aakash Sharma",
-    email: "aakash@example.com",
-    phone: "+91 98765 43210",
-    avatarUrl: "",
-  };
+  const data = await apiGet("/profile");
+  return normalizeUser(data.user);
 }
 
-export async function updateProfileRequest(data) {
-  await new Promise((r) => setTimeout(r, 900));
-  return { message: "Profile updated.", data };
+export async function updateProfileRequest({ fullName, phone, avatarUrl }) {
+  const data = await apiPatch("/profile", { fullName, phone, avatarUrl });
+  return normalizeUser(data.user);
 }

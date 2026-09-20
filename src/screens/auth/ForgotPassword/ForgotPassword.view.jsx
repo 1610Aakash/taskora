@@ -7,7 +7,7 @@ export default function ForgotPasswordView() {
   return (
     <AuthLayout
       title="Forgot password"
-      subtitle="Enter your email and we'll send you a reset link."
+      subtitle="Enter your account email and we&apos;ll help you reset access."
       footer={
         <Link href="/login" className="flex items-center justify-center gap-1 text-primary hover:underline">
           <ArrowLeft className="h-3.5 w-3.5" />

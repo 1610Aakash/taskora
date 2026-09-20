@@ -25,7 +25,6 @@ export default function NotificationsView() {
       }
       backHref={backHref}
       backLabel="Back to dashboard"
-      wide
     >
       {!loading && unreadCount > 0 && (
         <button

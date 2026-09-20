@@ -1,16 +1,12 @@
-import { mockUsers } from "@/lib/mock/mockData";
+import { apiGet, apiPatch } from "@/lib/api/client";
+import { normalizeUser } from "@/lib/utils/normalize";
 
 export async function getUserRequest(userId) {
-  await new Promise((r) => setTimeout(r, 700));
-  const user = mockUsers.find((u) => u.id === userId);
-  if (!user) throw new Error("User not found.");
-  return user;
+  const data = await apiGet(`/users/${userId}`);
+  return normalizeUser(data.user);
 }
 
-export async function updateUserRequest(userId, data) {
-  await new Promise((r) => setTimeout(r, 900));
-  const user = mockUsers.find((u) => u.id === userId);
-  if (!user) throw new Error("User not found.");
-  Object.assign(user, data);
-  return user;
+export async function updateUserRequest(userId, { fullName, email }) {
+  const data = await apiPatch(`/users/${userId}`, { fullName, email });
+  return normalizeUser(data.user);
 }

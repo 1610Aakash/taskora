@@ -21,6 +21,12 @@
 }
 
 body {
+  min-height: 100vh;
   background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-primary) 55%, transparent);
   color: var(--color-foreground);
 }

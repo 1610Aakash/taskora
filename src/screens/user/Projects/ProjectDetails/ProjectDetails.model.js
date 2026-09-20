@@ -1,9 +1,13 @@
-import { mockProjects, mockTasks } from "@/lib/mock/mockData";
+import { apiGet } from "@/lib/api/client";
+import { normalizeProject, normalizeTask } from "@/lib/utils/normalize";
 
 export async function getProjectDetailsRequest(projectId) {
-  await new Promise((r) => setTimeout(r, 700));
-  const project = mockProjects.find((p) => p.id === projectId);
-  if (!project) throw new Error("Project not found.");
-  const tasks = mockTasks.filter((t) => t.projectId === projectId);
-  return { project, tasks };
+  const [projectRes, tasksRes] = await Promise.all([
+    apiGet(`/projects/${projectId}`),
+    apiGet(`/tasks?projectId=${projectId}`),
+  ]);
+  return {
+    project: normalizeProject(projectRes.project),
+    tasks: tasksRes.tasks.map(normalizeTask),
+  };
 }

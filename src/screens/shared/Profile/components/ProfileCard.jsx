@@ -5,7 +5,7 @@ import { Pencil, KeyRound, Loader2 } from "lucide-react";
 import { useProfileViewModel } from "../Profile.viewmodel";
 
 export default function ProfileCard() {
-  const { profile, loading } = useProfileViewModel();
+  const { profile, loading, error } = useProfileViewModel();
 
   if (loading) {
     return (
@@ -13,6 +13,10 @@ export default function ProfileCard() {
         <Loader2 className="h-6 w-6 animate-spin text-primary" />
       </div>
     );
+  }
+
+  if (error || !profile) {
+    return <p className="py-10 text-center text-sm text-danger">{error || "Unable to load your profile."}</p>;
   }
 
   const initials = profile.fullName
@@ -25,8 +29,11 @@ export default function ProfileCard() {
   return (
     <div>
       <div className="flex items-center gap-4">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground">
-          {initials}
+        <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-primary text-lg font-semibold text-primary-foreground">
+          {profile.avatarUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={profile.avatarUrl} alt="Profile avatar" className="h-full w-full object-cover" />
+          ) : initials}
         </div>
         <div>
           <p className="text-lg font-semibold text-foreground">{profile.fullName}</p>

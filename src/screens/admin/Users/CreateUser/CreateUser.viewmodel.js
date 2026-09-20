@@ -6,7 +6,7 @@ import { createUserRequest } from "./CreateUser.model";
 
 export function useCreateUserViewModel() {
   const router = useRouter();
-  const [form, setForm] = useState({ fullName: "", email: "" });
+  const [form, setForm] = useState({ fullName: "", email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,6 +22,9 @@ export function useCreateUserViewModel() {
     if (!form.email) next.email = "Email is required.";
     else if (!/\S+@\S+\.\S+/.test(form.email))
       next.email = "Enter a valid email.";
+    if (!form.password) next.password = "Password is required.";
+    else if (form.password.length < 8)
+      next.password = "At least 8 characters.";
     setErrors(next);
     return Object.keys(next).length === 0;
   };

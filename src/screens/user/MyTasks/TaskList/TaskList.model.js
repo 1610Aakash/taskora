@@ -1,6 +1,7 @@
-import { mockTasks } from "@/lib/mock/mockData";
+import { apiGet } from "@/lib/api/client";
+import { normalizeTask } from "@/lib/utils/normalize";
 
 export async function getMyTasksRequest() {
-  await new Promise((r) => setTimeout(r, 700));
-  return mockTasks;
+  const data = await apiGet("/tasks?mine=true");
+  return data.tasks.map(normalizeTask);
 }

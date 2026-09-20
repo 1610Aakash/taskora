@@ -1,13 +1,5 @@
-// Stubbed until backend/JWT is wired up.
+import { apiPost } from "@/lib/api/client";
+
 export async function loginRequest({ email, password }) {
-  await new Promise((r) => setTimeout(r, 900));
-
-  if (email === "fail@test.com") {
-    throw new Error("Invalid email or password.");
-  }
-
-  return {
-    token: "mock-jwt-token",
-    user: { email, role: email.includes("admin") ? "admin" : "user" },
-  };
+  return apiPost("/auth/login", { email, password }); // { user: { id, fullName, email, role } }
 }

@@ -1,10 +1,16 @@
-import { mockTasks, mockProjects, mockUsers } from "@/lib/mock/mockData";
+import { apiGet, apiPost } from "@/lib/api/client";
 
 export async function getTaskFormOptionsRequest() {
-  await new Promise((r) => setTimeout(r, 500));
+  const [projectsRes, usersRes] = await Promise.all([
+    apiGet("/projects"),
+    apiGet("/users"),
+  ]);
   return {
-    projects: mockProjects.map((p) => ({ value: p.id, label: p.name })),
-    users: mockUsers.map((u) => ({ value: u.id, label: u.fullName })),
+    projects: projectsRes.projects.map((p) => ({
+      value: p._id,
+      label: p.name,
+    })),
+    users: usersRes.users.map((u) => ({ value: u._id, label: u.fullName })),
   };
 }
 
@@ -17,29 +23,13 @@ export async function createTaskRequest({
   status,
   dueDate,
 }) {
-  await new Promise((r) => setTimeout(r, 900));
-
-  const project = mockProjects.find((p) => p.id === projectId);
-  const user = mockUsers.find((u) => u.id === assignedUserId);
-
-  const newTask = {
-    id: `t${mockTasks.length + 1}`,
+  return apiPost("/tasks", {
     name,
     description,
-    projectId,
-    projectName: project?.name || "",
-    assignedUserId,
-    assignedUserName: user?.fullName || "",
+    project: projectId,
+    assignedUser: assignedUserId,
     priority,
     status,
     dueDate,
-  };
-  mockTasks.push(newTask);
-
-  if (project) {
-    project.taskCount += 1;
-    if (status === "completed") project.completedCount += 1;
-  }
-
-  return newTask;
+  });
 }

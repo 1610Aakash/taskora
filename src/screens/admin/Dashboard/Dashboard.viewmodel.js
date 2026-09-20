@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 import { getAdminDashboardDataRequest } from "./Dashboard.model";
 
 export function useAdminDashboardViewModel() {
+  const { user } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -20,5 +22,5 @@ export function useAdminDashboardViewModel() {
     };
   }, []);
 
-  return { data, loading };
+  return { admin: user, data, loading };
 }
