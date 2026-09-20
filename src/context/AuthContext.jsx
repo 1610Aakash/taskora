@@ -27,7 +27,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    refreshUser();
+    const timeout = setTimeout(() => refreshUser(), 0);
+    return () => clearTimeout(timeout);
   }, [refreshUser]);
 
   const logout = useCallback(async () => {

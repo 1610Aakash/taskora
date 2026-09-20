@@ -14,9 +14,9 @@ export default function Input({ label, icon: Icon, error, id, ...props }) {
         )}
         <input
           id={id}
-          className={`w-full rounded-lg border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-primary ${
+          className={`h-11 w-full rounded-lg border bg-background/80 px-3 text-sm text-foreground placeholder:text-muted outline-none transition-all duration-200 focus:border-primary focus:bg-card focus:ring-4 focus:ring-primary/10 ${
             Icon ? "pl-10" : ""
-          } ${error ? "border-danger" : "border-border"}`}
+          } ${error ? "border-danger focus:ring-danger/10" : "border-border"}`}
           {...props}
         />
       </div>

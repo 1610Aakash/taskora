@@ -11,17 +11,17 @@ export function useAdminProjectDetailsViewModel(projectId) {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    getProjectDetailsRequest(projectId)
+    const timeout = setTimeout(() => getProjectDetailsRequest(projectId)
       .then((data) => {
         if (cancelled) return;
         setProject(data.project);
         setTasks(data.tasks);
       })
       .catch((err) => !cancelled && setError(err.message))
-      .finally(() => !cancelled && setLoading(false));
+      .finally(() => !cancelled && setLoading(false)), 0);
     return () => {
       cancelled = true;
+      clearTimeout(timeout);
     };
   }, [projectId]);
 

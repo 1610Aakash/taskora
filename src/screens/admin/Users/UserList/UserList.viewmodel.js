@@ -11,8 +11,8 @@ export function useUserListViewModel() {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
     const timeout = setTimeout(() => {
+      setLoading(true);
       getUsersRequest({ status: statusFilter, search }).then((data) => {
         if (!cancelled) {
           setUsers(data);

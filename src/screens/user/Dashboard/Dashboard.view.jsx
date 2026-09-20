@@ -1,29 +1,26 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { DashboardSkeleton } from "@/components/common/Skeleton";
 import WelcomeHeader from "./components/WelcomeHeader";
 import RecentProjectsCard from "./components/RecentProjectsCard";
 import RecentTasksCard from "./components/RecentTasksCard";
 import { useDashboardViewModel } from "./Dashboard.viewmodel";
+import { MotionItem, MotionPage } from "@/components/animations/Motion";
 
 export default function DashboardView() {
   const { user, data, loading } = useDashboardViewModel();
 
   if (loading || !data) {
-    return (
-      <div className="flex justify-center py-16">
-        <Loader2 className="h-6 w-6 animate-spin text-primary" />
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (
-    <div className="space-y-6">
-      <WelcomeHeader name={user?.fullName} />
-      <div className="grid gap-6 md:grid-cols-2">
+    <MotionPage className="space-y-7">
+      <MotionItem><WelcomeHeader name={user?.fullName} /></MotionItem>
+      <MotionItem><div className="grid gap-6 md:grid-cols-2">
         <RecentProjectsCard projects={data.recentProjects} />
         <RecentTasksCard tasks={data.recentTasks} />
-      </div>
-    </div>
+      </div></MotionItem>
+    </MotionPage>
   );
 }

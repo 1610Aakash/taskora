@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { ArrowRight, FolderKanban, Pencil } from "lucide-react";
+import { motion } from "framer-motion";
 import StatusBadge from "@/components/common/StatusBadge";
 
 export default function RecentProjectsCard({ projects }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-6">
+    <div className="surface rounded-2xl p-6">
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
           <FolderKanban className="h-4 w-4 text-primary" />
@@ -20,7 +21,7 @@ export default function RecentProjectsCard({ projects }) {
 
       <div className="mt-4 space-y-3">
         {projects.map((p) => (
-          <div key={p.id} className="rounded-lg border border-border p-3">
+          <div key={p.id} className="interactive-surface rounded-xl border border-border-subtle bg-background/30 p-3">
             <div className="flex items-center justify-between gap-3">
               <Link
                 href={`/admin/projects/${p.id}`}
@@ -39,7 +40,10 @@ export default function RecentProjectsCard({ projects }) {
               </div>
             </div>
             <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-background">
-              <div
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${Math.round((p.completedCount / p.taskCount) * 100)}%` }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
                 className="h-full rounded-full bg-primary"
                 style={{
                   width: `${Math.round((p.completedCount / p.taskCount) * 100)}%`,

@@ -12,7 +12,7 @@ export default function SectionLayout({
   children,
 }) {
   return (
-    <main className="min-h-screen bg-background px-5 pb-12 pt-0 md:px-8">
+    <main className="min-h-screen px-5 pb-12 pt-0 md:px-8">
       <div className="w-full">
         <Link
           href={backHref}
@@ -26,7 +26,7 @@ export default function SectionLayout({
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="w-full rounded-xl border border-border bg-card p-6 shadow-2xl shadow-black/20 md:p-8"
+          className="surface w-full rounded-2xl p-6 md:p-8"
         >
           <h1 className="text-2xl font-bold text-foreground">{title}</h1>
           {subtitle && <p className="mt-1.5 text-sm text-muted">{subtitle}</p>}

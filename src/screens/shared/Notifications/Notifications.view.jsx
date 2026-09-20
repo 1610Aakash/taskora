@@ -4,6 +4,8 @@ import { Loader2, Bell, CheckCheck } from "lucide-react";
 import SectionLayout from "@/components/layout/SectionLayout";
 import NotificationItem from "./components/NotificationItem";
 import { useNotificationsViewModel } from "./Notifications.viewmodel";
+import EmptyState from "@/components/common/EmptyState";
+import { MotionItem, MotionPage } from "@/components/animations/Motion";
 
 export default function NotificationsView() {
   const {
@@ -26,6 +28,7 @@ export default function NotificationsView() {
       backHref={backHref}
       backLabel="Back to dashboard"
     >
+      <MotionPage>
       {!loading && unreadCount > 0 && (
         <button
           onClick={onMarkAllRead}
@@ -42,21 +45,18 @@ export default function NotificationsView() {
           <Loader2 className="h-6 w-6 animate-spin text-primary" />
         </div>
       ) : notifications.length === 0 ? (
-        <div className="flex flex-col items-center gap-2 py-12 text-center">
-          <Bell className="h-8 w-8 text-muted" />
-          <p className="text-sm text-muted">No notifications yet.</p>
-        </div>
+        <EmptyState icon={Bell} title="You are all caught up" description="New assignments and project updates will appear here." />
       ) : (
-        <div className="divide-y divide-border overflow-hidden rounded-xl border border-border">
+        <div className="surface divide-y divide-border-subtle overflow-hidden rounded-2xl">
           {notifications.map((n) => (
-            <NotificationItem
-              key={n.id}
+            <MotionItem key={n.id}><NotificationItem
               notification={n}
               onMarkRead={onMarkRead}
-            />
+            /></MotionItem>
           ))}
         </div>
       )}
+      </MotionPage>
     </SectionLayout>
   );
 }

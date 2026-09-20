@@ -21,7 +21,7 @@ export default function PasswordInput({ label, error, id, ...props }) {
         <input
           id={id}
           type={visible ? "text" : "password"}
-          className={`w-full rounded-lg border bg-background px-3 py-2.5 pl-10 pr-10 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-primary ${
+          className={`h-11 w-full rounded-lg border bg-background/80 px-3 pl-10 pr-10 text-sm text-foreground placeholder:text-muted outline-none transition-all duration-200 focus:border-primary focus:bg-card focus:ring-4 focus:ring-primary/10 ${
             error ? "border-danger" : "border-border"
           }`}
           {...props}

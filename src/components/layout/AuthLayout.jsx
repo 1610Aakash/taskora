@@ -6,10 +6,10 @@ import { motion } from "framer-motion";
 
 export default function AuthLayout({ title, subtitle, children, footer }) {
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-5 py-10 md:px-10">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-10 md:px-10">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,rgba(99,102,241,0.18),transparent_30%),radial-gradient(circle_at_88%_82%,rgba(6,182,212,0.1),transparent_28%)]" />
-      <div className="relative grid w-full max-w-5xl overflow-hidden rounded-2xl border border-border bg-card/70 shadow-2xl shadow-black/30 lg:grid-cols-[1fr_0.9fr]">
-        <div className="hidden flex-col justify-between border-r border-border bg-primary/10 p-10 lg:flex">
+      <div className="surface relative grid w-full max-w-5xl overflow-hidden rounded-2xl lg:grid-cols-[1fr_0.9fr]">
+        <div className="hidden flex-col justify-between border-r border-border bg-primary/[0.06] p-10 lg:flex">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">Taskora workspace</p>
             <h2 className="mt-8 max-w-sm text-4xl font-bold leading-tight text-foreground">
@@ -32,9 +32,8 @@ export default function AuthLayout({ title, subtitle, children, footer }) {
         transition={{ duration: 0.4 }}
         className="w-full p-7 md:p-10"
       >
-        <Link href="/" className="mb-6 flex items-center justify-center gap-2">
-          <Image src="/Taskora_logo.png" alt="Taskora" width={32} height={32} />
-          <span className="text-lg font-bold text-foreground">Taskora</span>
+        <Link href="/" aria-label="Taskora home" className="mb-8 flex items-center justify-center">
+          <Image src="/Taskora_logo.png" alt="Taskora" width={126} height={36} className="h-8 w-auto object-contain" />
         </Link>
 
         <h1 className="text-center text-2xl font-bold text-foreground">

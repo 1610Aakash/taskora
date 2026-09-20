@@ -11,7 +11,7 @@ export default function UserCard({ user }) {
   return (
     <Link
       href={`/admin/users/${user.id}`}
-      className="flex items-center justify-between gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary/50"
+      className="interactive-surface surface flex items-center justify-between gap-3 rounded-2xl p-4"
     >
       <div className="flex min-w-0 items-center gap-3">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
