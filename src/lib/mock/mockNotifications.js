@@ -1,0 +1,88 @@
+export const adminNotifications = [
+  {
+    id: "n1",
+    type: "user_created",
+    title: "New user registered",
+    message: "Sarah Chen created an account and is awaiting verification.",
+    read: false,
+    createdAt: "2026-09-20T08:15:00",
+    link: "/admin/users/u2",
+  },
+  {
+    id: "n2",
+    type: "task_overdue",
+    title: "Task overdue",
+    message:
+      '"Configure Stripe webhook" was due yesterday and is still in progress.',
+    read: false,
+    createdAt: "2026-09-19T18:40:00",
+    link: "/admin/tasks/t3",
+  },
+  {
+    id: "n3",
+    type: "project_completed",
+    title: "Project completed",
+    message: '"Marketing Dashboard" has been marked as completed.',
+    read: true,
+    createdAt: "2026-09-18T11:05:00",
+    link: "/admin/projects/p3",
+  },
+  {
+    id: "n4",
+    type: "task_completed",
+    title: "Task completed",
+    message: 'Marcus Reddy completed "Audit Google Analytics 4 tags".',
+    read: true,
+    createdAt: "2026-09-17T15:30:00",
+    link: "/admin/tasks/t4",
+  },
+  {
+    id: "n5",
+    type: "user_deactivated",
+    title: "User deactivated",
+    message: "Maria Silva's account was marked inactive.",
+    read: true,
+    createdAt: "2026-09-15T09:00:00",
+    link: "/admin/users/u4",
+  },
+];
+
+export const userNotifications = [
+  {
+    id: "n1",
+    type: "task_assigned",
+    title: "New task assigned",
+    message:
+      'You were assigned "Implement OAuth2 refresh flow" on Mobile App Development.',
+    read: false,
+    createdAt: "2026-09-20T09:00:00",
+    link: "/user/my-tasks/t1",
+  },
+  {
+    id: "n2",
+    type: "due_soon",
+    title: "Task due soon",
+    message: '"Set up Redis cache layer" is due in 2 days.',
+    read: false,
+    createdAt: "2026-09-19T12:00:00",
+    link: "/user/my-tasks/t5",
+  },
+  {
+    id: "n3",
+    type: "task_updated",
+    title: "Task priority changed",
+    message: '"Implement OAuth2 refresh flow" was marked Urgent by the admin.',
+    read: true,
+    createdAt: "2026-09-18T14:20:00",
+    link: "/user/my-tasks/t1",
+  },
+  {
+    id: "n4",
+    type: "project_update",
+    title: "Project status updated",
+    message: '"Website Redesign" is now In Progress.',
+    read: true,
+    createdAt: "2026-09-16T10:10:00",
+    link: "/user/projects/p1",
+  },
+];

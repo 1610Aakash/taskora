@@ -9,11 +9,12 @@ export default function SectionLayout({
   subtitle,
   backHref = "/",
   backLabel = "Back",
+  wide = false,
   children,
 }) {
   return (
     <main className="min-h-screen bg-background px-6 py-12">
-      <div className="mx-auto max-w-lg">
+      <div className={`mx-auto ${wide ? "max-w-2xl" : "max-w-lg"}`}>
         <Link
           href={backHref}
           className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-foreground"
