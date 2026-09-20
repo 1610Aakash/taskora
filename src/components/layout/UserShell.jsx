@@ -16,7 +16,7 @@ const NAV_ITEMS = [
   { href: "/user/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/user/projects", label: "Projects", icon: FolderKanban },
   { href: "/user/my-tasks", label: "My Tasks", icon: ListChecks },
-  { href: "/notifications", label: "Notifications", icon: Bell },
+  { href: "/notifications?role=user", label: "Notifications", icon: Bell },
   { href: "/profile", label: "Profile", icon: UserIcon },
 ];
 
@@ -25,7 +25,7 @@ export default function UserShell({ children }) {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <aside className="sticky top-0 hidden h-screen w-60 flex-shrink-0 flex-col border-r border-border bg-card md:flex">
+      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-border bg-card md:flex">
         <div className="flex items-center gap-2 px-6 py-5">
           <Image src="/Taskora_logo.png" alt="Taskora" width={28} height={28} />
           <span className="font-bold text-foreground">Taskora</span>
