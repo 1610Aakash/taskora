@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LogOut, UserCircle } from "lucide-react";
+import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 
 export default function AppHeader({ onLogout }) {
@@ -12,7 +13,7 @@ export default function AppHeader({ onLogout }) {
     : "?";
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 h-16 border-b border-border bg-card/95 backdrop-blur-md">
+    <header className="fixed inset-x-0 top-0 z-40 h-[4.5rem] border-b border-border/80 bg-background/85 backdrop-blur-xl">
       <div className="flex h-full items-center justify-between px-5 md:px-8">
         <Link href="/" aria-label="Taskora home" className="flex items-center">
           <Image
@@ -20,7 +21,7 @@ export default function AppHeader({ onLogout }) {
             alt="Taskora"
             width={126}
             height={36}
-            className="h-9 w-auto object-contain"
+            className="h-8 w-auto object-contain"
             priority
           />
         </Link>
@@ -42,15 +43,16 @@ export default function AppHeader({ onLogout }) {
             </span>
             <UserCircle className="h-4 w-4 text-muted" />
           </Link>
-          <button
+          <motion.button
             type="button"
             onClick={onLogout}
             className="inline-flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm font-medium text-muted transition-colors hover:bg-background hover:text-foreground"
             aria-label="Log out"
+            whileTap={{ scale: 0.96 }}
           >
             <LogOut className="h-4 w-4" />
             <span className="hidden md:inline">Log out</span>
-          </button>
+          </motion.button>
         </div>
       </div>
     </header>

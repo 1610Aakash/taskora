@@ -8,7 +8,7 @@ export default function ProjectCard({ project }) {
   return (
     <Link
       href={`/user/projects/${project.id}`}
-      className="block rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/50"
+      className="interactive-surface surface block rounded-2xl p-5"
     >
       <div className="flex items-start justify-between gap-3">
         <p className="font-semibold text-foreground">{project.name}</p>
@@ -18,7 +18,7 @@ export default function ProjectCard({ project }) {
         {project.description}
       </p>
 
-      <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-background">
+      <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-background">
         <div
           className="h-full rounded-full bg-primary"
           style={{ width: `${pct}%` }}

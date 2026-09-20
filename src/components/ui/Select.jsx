@@ -27,9 +27,9 @@ export default function Select({
         )}
         <select
           id={id}
-          className={`w-full appearance-none rounded-lg border bg-background px-3 py-2.5 pr-9 text-sm text-foreground outline-none transition-colors focus:border-primary ${
+          className={`h-11 w-full appearance-none rounded-lg border bg-background/80 px-3 pr-9 text-sm text-foreground outline-none transition-all duration-200 focus:border-primary focus:bg-card focus:ring-4 focus:ring-primary/10 ${
             Icon ? "pl-10" : ""
-          } ${error ? "border-danger" : "border-border"}`}
+          } ${error ? "border-danger focus:ring-danger/10" : "border-border"}`}
           {...props}
         >
           {placeholder && <option value="">{placeholder}</option>}

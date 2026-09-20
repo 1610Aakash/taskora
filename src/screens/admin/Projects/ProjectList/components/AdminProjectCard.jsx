@@ -6,7 +6,7 @@ export default function AdminProjectCard({ project }) {
   const pct = Math.round((project.completedCount / project.taskCount) * 100);
 
   return (
-    <div className="relative rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/50">
+    <div className="interactive-surface surface relative rounded-2xl p-5">
       <Link
         href={`/admin/projects/${project.id}/edit`}
         className="absolute right-4 top-4 text-muted hover:text-primary"
@@ -23,9 +23,9 @@ export default function AdminProjectCard({ project }) {
           {project.description}
         </p>
 
-        <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-background">
+        <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-background">
           <div
-            className="h-full rounded-full bg-primary"
+            className="h-full rounded-full bg-primary transition-all duration-500"
             style={{ width: `${pct}%` }}
           />
         </div>

@@ -5,7 +5,7 @@ import PriorityTag from "@/components/common/PriorityTag";
 
 export default function RecentTasksCard({ tasks }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-6">
+    <div className="surface rounded-2xl p-6">
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
           <ListChecks className="h-4 w-4 text-primary" />
@@ -24,7 +24,7 @@ export default function RecentTasksCard({ tasks }) {
           <Link
             key={t.id}
             href={`/admin/tasks/${t.id}`}
-            className="flex items-center justify-between gap-3 rounded-lg border border-border p-3 transition-colors hover:border-primary/50"
+            className="interactive-surface flex items-center justify-between gap-3 rounded-xl border border-border-subtle bg-background/30 p-3"
           >
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-foreground">

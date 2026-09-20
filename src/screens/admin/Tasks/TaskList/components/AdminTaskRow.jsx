@@ -5,9 +5,9 @@ import PriorityTag from "@/components/common/PriorityTag";
 
 export default function AdminTaskRow({ task }) {
   return (
-    <div className="flex items-center justify-between gap-3 p-4 transition-colors hover:bg-background">
+    <div className="group flex items-center justify-between gap-3 p-4 transition-colors hover:bg-card-elevated">
       <Link href={`/admin/tasks/${task.id}`} className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-foreground">
+          <p className="truncate text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
           {task.name}
         </p>
         <p className="mt-0.5 text-xs text-muted">

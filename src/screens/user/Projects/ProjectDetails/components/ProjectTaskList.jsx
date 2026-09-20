@@ -12,7 +12,7 @@ export default function ProjectTaskList({ tasks }) {
   }
 
   return (
-    <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
+    <div className="surface divide-y divide-border-subtle overflow-hidden rounded-2xl">
       {tasks.map((t) => (
         <Link
           key={t.id}

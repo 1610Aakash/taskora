@@ -27,7 +27,7 @@ export default function ProfileCard() {
     .toUpperCase();
 
   return (
-    <div>
+    <div className="max-w-3xl">
       <div className="flex items-center gap-4">
         <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-primary text-lg font-semibold text-primary-foreground">
           {profile.avatarUrl ? (
@@ -44,7 +44,7 @@ export default function ProfileCard() {
         </div>
       </div>
 
-      <dl className="mt-6 space-y-3 border-t border-border pt-6 text-sm">
+      <dl className="mt-8 grid gap-4 border-t border-border pt-6 text-sm sm:grid-cols-2">
         <div className="flex justify-between">
           <dt className="text-muted">Phone</dt>
           <dd className="text-foreground">{profile.phone || "—"}</dd>

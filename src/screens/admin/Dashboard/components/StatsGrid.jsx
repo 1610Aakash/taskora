@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   AlertTriangle,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function StatsGrid({ stats }) {
   const items = [
@@ -48,15 +49,18 @@ export default function StatsGrid({ stats }) {
 
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-      {items.map(({ label, value, icon: Icon, color }) => (
-        <div
+      {items.map(({ label, value, icon: Icon, color }, index) => (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.05, duration: 0.25 }}
           key={label}
-          className="rounded-xl border border-border bg-card p-4"
+          className="interactive-surface surface rounded-2xl p-4"
         >
-          <Icon className={`h-4.5 w-4.5 ${color}`} />
-          <p className="mt-2 text-xl font-bold text-foreground">{value}</p>
-          <p className="text-xs text-muted">{label}</p>
-        </div>
+          <div className="flex items-center justify-between"><Icon className={`h-4.5 w-4.5 ${color}`} /><span className="h-1.5 w-1.5 rounded-full bg-current opacity-50" /></div>
+          <p className="mt-5 text-2xl font-semibold tracking-tight text-foreground">{value}</p>
+          <p className="mt-1 text-xs font-medium text-muted">{label}</p>
+        </motion.div>
       ))}
     </div>
   );

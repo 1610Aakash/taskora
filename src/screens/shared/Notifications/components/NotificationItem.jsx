@@ -9,8 +9,8 @@ export default function NotificationItem({ notification, onMarkRead }) {
     <Link
       href={notification.link}
       onClick={() => !notification.read && onMarkRead(notification.id)}
-      className={`flex items-start gap-3 p-4 transition-colors hover:bg-background ${
-        !notification.read ? "bg-primary/5" : ""
+      className={`group flex items-start gap-3 p-4 transition-colors hover:bg-card-elevated ${
+        !notification.read ? "bg-primary/[0.07]" : ""
       }`}
     >
       <NotificationIcon type={notification.type} />
