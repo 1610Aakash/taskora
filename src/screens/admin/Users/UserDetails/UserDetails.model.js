@@ -1,16 +1,13 @@
-import { mockUsers } from "@/lib/mock/mockData";
+import { apiGet, apiPatch } from "@/lib/api/client";
+import { normalizeUser } from "@/lib/utils/normalize";
 
 export async function getUserRequest(userId) {
-  await new Promise((r) => setTimeout(r, 700));
-  const user = mockUsers.find((u) => u.id === userId);
-  if (!user) throw new Error("User not found.");
-  return user;
+  const data = await apiGet(`/users/${userId}`);
+  return normalizeUser(data.user);
 }
 
-export async function toggleUserStatusRequest(userId) {
-  await new Promise((r) => setTimeout(r, 600));
-  const user = mockUsers.find((u) => u.id === userId);
-  if (!user) throw new Error("User not found.");
-  user.status = user.status === "active" ? "inactive" : "active";
-  return user;
+export async function toggleUserStatusRequest(userId, currentStatus) {
+  const nextStatus = currentStatus === "active" ? "inactive" : "active";
+  const data = await apiPatch(`/users/${userId}`, { status: nextStatus });
+  return normalizeUser(data.user);
 }

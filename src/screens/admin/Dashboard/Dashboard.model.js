@@ -1,32 +1,16 @@
+import { apiGet } from "@/lib/api/client";
 import {
-  mockAdmin,
-  mockUsers,
-  mockProjects,
-  mockTasks,
-} from "@/lib/mock/mockData";
+  normalizeProject,
+  normalizeTask,
+  normalizeUser,
+} from "@/lib/utils/normalize";
 
 export async function getAdminDashboardDataRequest() {
-  await new Promise((r) => setTimeout(r, 700));
-
-  const today = new Date();
-  const overdueTasks = mockTasks.filter(
-    (t) => t.status !== "completed" && new Date(t.dueDate) < today,
-  ).length;
-
+  const data = await apiGet("/admin/dashboard");
   return {
-    admin: mockAdmin,
-    stats: {
-      totalUsers: mockUsers.length,
-      activeUsers: mockUsers.filter((u) => u.status === "active").length,
-      totalProjects: mockProjects.length,
-      totalTasks: mockTasks.length,
-      completedTasks: mockTasks.filter((t) => t.status === "completed").length,
-      overdueTasks,
-    },
-    recentProjects: mockProjects.slice(0, 3),
-    recentTasks: mockTasks.slice(0, 4),
-    recentUsers: [...mockUsers]
-      .sort((a, b) => new Date(b.joinedAt) - new Date(a.joinedAt))
-      .slice(0, 4),
+    stats: data.stats,
+    recentProjects: data.recentProjects.map(normalizeProject),
+    recentTasks: data.recentTasks.map(normalizeTask),
+    recentUsers: data.recentUsers.map(normalizeUser),
   };
 }

@@ -1,23 +1,24 @@
-import { mockProjects } from "@/lib/mock/mockData";
+import { apiGet, apiPatch, apiDelete } from "@/lib/api/client";
+import { normalizeProject } from "@/lib/utils/normalize";
 
 export async function getProjectRequest(projectId) {
-  await new Promise((r) => setTimeout(r, 700));
-  const project = mockProjects.find((p) => p.id === projectId);
-  if (!project) throw new Error("Project not found.");
-  return project;
+  const data = await apiGet(`/projects/${projectId}`);
+  return normalizeProject(data.project);
 }
 
-export async function updateProjectRequest(projectId, data) {
-  await new Promise((r) => setTimeout(r, 900));
-  const project = mockProjects.find((p) => p.id === projectId);
-  if (!project) throw new Error("Project not found.");
-  Object.assign(project, data);
-  return project;
+export async function updateProjectRequest(
+  projectId,
+  { name, description, status, dueDate },
+) {
+  const data = await apiPatch(`/projects/${projectId}`, {
+    name,
+    description,
+    status,
+    dueDate,
+  });
+  return normalizeProject(data.project);
 }
 
 export async function deleteProjectRequest(projectId) {
-  await new Promise((r) => setTimeout(r, 700));
-  const index = mockProjects.findIndex((p) => p.id === projectId);
-  if (index === -1) throw new Error("Project not found.");
-  mockProjects.splice(index, 1);
+  return apiDelete(`/projects/${projectId}`);
 }

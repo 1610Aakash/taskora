@@ -23,7 +23,7 @@ export function useUserDetailsViewModel(userId) {
   const onToggleStatus = async () => {
     setToggling(true);
     try {
-      const updated = await toggleUserStatusRequest(userId);
+      const updated = await toggleUserStatusRequest(userId, user.status);
       setUser(updated);
     } finally {
       setToggling(false);

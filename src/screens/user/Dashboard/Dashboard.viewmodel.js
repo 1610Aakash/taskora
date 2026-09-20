@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 import { getDashboardDataRequest } from "./Dashboard.model";
 
 export function useDashboardViewModel() {
+  const { user } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -20,5 +22,5 @@ export function useDashboardViewModel() {
     };
   }, []);
 
-  return { data, loading };
+  return { user, data, loading };
 }

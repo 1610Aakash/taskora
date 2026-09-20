@@ -9,18 +9,14 @@ export function useEmailVerificationViewModel() {
   const token = searchParams.get("token");
   const email = searchParams.get("email") || "";
 
-  const [status, setStatus] = useState("verifying"); // verifying | success | error
+  const [status, setStatus] = useState(token ? "verifying" : "pending"); // verifying | success | error | pending
   const [resending, setResending] = useState(false);
   const [cooldown, setCooldown] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
 
-    // No token means we landed here right after signup — show a "check your inbox" state
-    if (!token) {
-      setStatus("pending");
-      return;
-    }
+    if (!token) return;
 
     verifyEmailRequest(token)
       .then(() => !cancelled && setStatus("success"))

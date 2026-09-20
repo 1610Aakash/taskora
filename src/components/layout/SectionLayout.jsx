@@ -9,12 +9,11 @@ export default function SectionLayout({
   subtitle,
   backHref = "/",
   backLabel = "Back",
-  wide = false,
   children,
 }) {
   return (
-    <main className="min-h-screen bg-background px-6 py-12">
-      <div className={`mx-auto ${wide ? "max-w-2xl" : "max-w-lg"}`}>
+    <main className="min-h-screen bg-background px-5 pb-12 pt-0 md:px-8">
+      <div className="w-full">
         <Link
           href={backHref}
           className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-foreground"
@@ -27,7 +26,7 @@ export default function SectionLayout({
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="rounded-xl border border-border bg-card p-8 shadow-2xl shadow-black/20"
+          className="w-full rounded-xl border border-border bg-card p-6 shadow-2xl shadow-black/20 md:p-8"
         >
           <h1 className="text-2xl font-bold text-foreground">{title}</h1>
           {subtitle && <p className="mt-1.5 text-sm text-muted">{subtitle}</p>}

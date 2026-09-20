@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import { getProfileRequest, updateProfileRequest } from "./EditProfile.model";
 
 export function useEditProfileViewModel() {
   const router = useRouter();
+  const { refreshUser } = useAuth();
   const [form, setForm] = useState({ fullName: "", email: "", phone: "" });
   const [avatarPreview, setAvatarPreview] = useState("");
-  const [avatarFile, setAvatarFile] = useState(null);
   const [errors, setErrors] = useState({});
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -35,8 +36,9 @@ export function useEditProfileViewModel() {
   const onAvatarChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setAvatarFile(file);
-    setAvatarPreview(URL.createObjectURL(file));
+    const reader = new FileReader();
+    reader.onload = () => setAvatarPreview(reader.result);
+    reader.readAsDataURL(file);
   };
 
   const validate = () => {
@@ -53,7 +55,8 @@ export function useEditProfileViewModel() {
 
     setSaving(true);
     try {
-      await updateProfileRequest({ ...form, avatarFile });
+      await updateProfileRequest({ ...form, avatarUrl: avatarPreview });
+      await refreshUser();
       router.push("/profile");
     } finally {
       setSaving(false);

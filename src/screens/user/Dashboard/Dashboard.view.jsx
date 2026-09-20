@@ -7,9 +7,9 @@ import RecentTasksCard from "./components/RecentTasksCard";
 import { useDashboardViewModel } from "./Dashboard.viewmodel";
 
 export default function DashboardView() {
-  const { data, loading } = useDashboardViewModel();
+  const { user, data, loading } = useDashboardViewModel();
 
-  if (loading) {
+  if (loading || !data) {
     return (
       <div className="flex justify-center py-16">
         <Loader2 className="h-6 w-6 animate-spin text-primary" />
@@ -19,7 +19,7 @@ export default function DashboardView() {
 
   return (
     <div className="space-y-6">
-      <WelcomeHeader name={data.user.fullName} />
+      <WelcomeHeader name={user?.fullName} />
       <div className="grid gap-6 md:grid-cols-2">
         <RecentProjectsCard projects={data.recentProjects} />
         <RecentTasksCard tasks={data.recentTasks} />

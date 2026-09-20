@@ -5,7 +5,7 @@ export default function LandingView() {
   return (
     <>
       <Navbar />
-      <main className="flex min-h-[calc(100vh-73px)] items-center justify-center bg-background px-6">
+      <main className="relative flex min-h-[calc(100vh-73px)] items-center overflow-hidden bg-background px-5 py-14 md:px-10">
         <Hero />
       </main>
     </>

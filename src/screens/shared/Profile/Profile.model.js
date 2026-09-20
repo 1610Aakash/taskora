@@ -1,13 +1,7 @@
-export async function getProfileRequest() {
-  await new Promise((r) => setTimeout(r, 700));
+import { apiGet } from "@/lib/api/client";
+import { normalizeUser } from "@/lib/utils/normalize";
 
-  // Stub — replace with a real GET /me call once backend exists.
-  return {
-    fullName: "Aakash Sharma",
-    email: "aakash@example.com",
-    role: "admin",
-    phone: "+91 98765 43210",
-    avatarUrl: "",
-    joinedAt: "2025-08-01",
-  };
+export async function getProfileRequest() {
+  const data = await apiGet("/profile");
+  return normalizeUser(data.user);
 }

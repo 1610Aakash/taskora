@@ -15,7 +15,6 @@ export function useTaskDetailsViewModel(taskId) {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
     getTaskDetailsRequest(taskId)
       .then((data) => !cancelled && setTask(data))
       .catch((err) => !cancelled && setError(err.message))

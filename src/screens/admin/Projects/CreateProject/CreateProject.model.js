@@ -1,4 +1,5 @@
-import { mockProjects } from "@/lib/mock/mockData";
+import { apiPost } from "@/lib/api/client";
+import { normalizeProject } from "@/lib/utils/normalize";
 
 export async function createProjectRequest({
   name,
@@ -6,17 +7,11 @@ export async function createProjectRequest({
   status,
   dueDate,
 }) {
-  await new Promise((r) => setTimeout(r, 900));
-
-  const newProject = {
-    id: `p${mockProjects.length + 1}`,
+  const data = await apiPost("/projects", {
     name,
     description,
     status,
     dueDate,
-    taskCount: 0,
-    completedCount: 0,
-  };
-  mockProjects.push(newProject);
-  return newProject;
+  });
+  return normalizeProject(data.project);
 }

@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import { loginRequest } from "./Login.model";
 
 export function useLoginViewModel() {
   const router = useRouter();
+  const { refreshUser } = useAuth();
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -34,6 +36,7 @@ export function useLoginViewModel() {
     setLoading(true);
     try {
       const { user } = await loginRequest(form);
+      await refreshUser();
       router.push(
         user.role === "admin" ? "/admin/dashboard" : "/user/dashboard",
       );

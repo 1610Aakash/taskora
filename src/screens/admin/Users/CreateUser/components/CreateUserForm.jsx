@@ -2,6 +2,7 @@
 
 import { User, Mail } from "lucide-react";
 import Input from "@/components/ui/Input";
+import PasswordInput from "@/components/ui/PasswordInput";
 import Button from "@/components/ui/Button";
 import { useCreateUserViewModel } from "../CreateUser.viewmodel";
 
@@ -33,9 +34,19 @@ export default function CreateUserForm() {
         error={errors.email}
       />
 
+      <PasswordInput
+        id="password"
+        name="password"
+        label="Initial password"
+        placeholder="Create a password for this user"
+        value={form.password}
+        onChange={onChange}
+        error={errors.password}
+      />
+
       <p className="text-xs text-muted">
-        The user will receive an email to set their password and verify their
-        account.
+        Share these login details securely. The user can change their password
+        later from their profile.
       </p>
 
       {serverError && <p className="text-sm text-danger">{serverError}</p>}
