@@ -2,6 +2,8 @@ import crypto from "crypto";
 import connectDB from "@/lib/db/connectDB";
 import User from "@/models/User";
 import { success, error } from "@/lib/utils/apiResponse";
+import { sendEmail, getAppUrl } from "@/lib/email/resend";
+import { verificationEmail } from "@/lib/email/templates";
 
 export async function POST(request) {
   try {
@@ -16,9 +18,12 @@ export async function POST(request) {
       user.verificationToken = verificationToken;
       user.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
       await user.save();
-      console.log(
-        `Verification link: /verify-email?token=${verificationToken}&email=${user.email}`,
-      );
+
+      const verifyUrl = `${getAppUrl()}/verify-email?token=${verificationToken}&email=${encodeURIComponent(user.email)}`;
+      await sendEmail({
+        to: user.email,
+        ...verificationEmail({ fullName: user.fullName, verifyUrl }),
+      });
     }
 
     return success({

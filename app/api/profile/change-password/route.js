@@ -3,6 +3,8 @@ import connectDB from "@/lib/db/connectDB";
 import User from "@/models/User";
 import { requireAuth } from "@/lib/auth/requireAuth";
 import { success, error } from "@/lib/utils/apiResponse";
+import { sendEmail } from "@/lib/email/resend";
+import { passwordChangedEmail } from "@/lib/email/templates";
 
 export async function POST(request) {
   const {
@@ -27,6 +29,11 @@ export async function POST(request) {
 
     fullUser.password = await bcrypt.hash(newPassword, 10);
     await fullUser.save();
+
+    await sendEmail({
+      to: fullUser.email,
+      ...passwordChangedEmail({ fullName: fullUser.fullName }),
+    });
 
     return success({ message: "Password changed successfully." });
   } catch (err) {
