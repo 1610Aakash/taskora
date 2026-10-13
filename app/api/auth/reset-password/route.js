@@ -2,6 +2,8 @@ import bcrypt from "bcryptjs";
 import connectDB from "@/lib/db/connectDB";
 import User from "@/models/User";
 import { success, error } from "@/lib/utils/apiResponse";
+import { sendEmail } from "@/lib/email/resend";
+import { passwordChangedEmail } from "@/lib/email/templates";
 
 export async function POST(request) {
   try {
@@ -24,6 +26,11 @@ export async function POST(request) {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpiry = undefined;
     await user.save();
+
+    await sendEmail({
+      to: user.email,
+      ...passwordChangedEmail({ fullName: user.fullName, viaReset: true }),
+    });
 
     return success({ message: "Password reset successful." });
   } catch (err) {

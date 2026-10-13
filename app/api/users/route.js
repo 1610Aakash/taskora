@@ -1,8 +1,11 @@
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import connectDB from "@/lib/db/connectDB";
 import User from "@/models/User";
 import { requireAuth } from "@/lib/auth/requireAuth";
 import { success, error } from "@/lib/utils/apiResponse";
+import { sendEmail, getAppUrl } from "@/lib/email/resend";
+import { accountCreatedEmail } from "@/lib/email/templates";
 
 export async function GET(request) {
   const { error: authError, status } = await requireAuth(["admin"]);
@@ -32,27 +35,41 @@ export async function POST(request) {
   if (authError) return error(authError, status);
 
   try {
-    const { fullName, email, password } = await request.json();
-    if (!fullName || !email || !password)
-      return error("Full name, email, and password are required.");
-    if (password.length < 8)
-      return error("Password must be at least 8 characters.");
+    const { fullName, email } = await request.json();
+    if (!fullName || !email) return error("Full name and email are required.");
 
     await connectDB();
 
     const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) return error("A user with this email already exists.", 409);
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Random placeholder password; the user sets their own via the emailed link.
+    const placeholderPassword = crypto.randomBytes(24).toString("hex");
+    const hashedPassword = await bcrypt.hash(placeholderPassword, 10);
+    const setPasswordToken = crypto.randomBytes(32).toString("hex");
 
     const newUser = await User.create({
       fullName,
       email: email.toLowerCase(),
       password: hashedPassword,
       role: "user",
+      isVerified: true, // an admin vouched for this account
+      resetPasswordToken: setPasswordToken,
+      resetPasswordExpiry: Date.now() + 48 * 60 * 60 * 1000, // 48 hours
     });
 
-    return success({ user: newUser }, 201);
+    const setPasswordUrl = `${getAppUrl()}/reset-password?token=${setPasswordToken}`;
+    await sendEmail({
+      to: newUser.email,
+      ...accountCreatedEmail({ fullName: newUser.fullName, setPasswordUrl }),
+    });
+
+    const safeUser = newUser.toObject();
+    delete safeUser.password;
+    delete safeUser.resetPasswordToken;
+    delete safeUser.resetPasswordExpiry;
+
+    return success({ user: safeUser }, 201);
   } catch (err) {
     return error(err.message, 500);
   }

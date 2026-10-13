@@ -4,6 +4,8 @@ import User from "@/models/User";
 import { signToken } from "@/lib/auth/jwt";
 import { setAuthCookie } from "@/lib/auth/cookies";
 import { success, error } from "@/lib/utils/apiResponse";
+import { sendEmail } from "@/lib/email/resend";
+import { loginAlertEmail } from "@/lib/email/templates";
 
 export async function POST(request) {
   try {
@@ -24,6 +26,22 @@ export async function POST(request) {
 
     const token = signToken({ userId: user._id.toString(), role: user.role });
     await setAuthCookie(token);
+
+    const device = request.headers.get("user-agent") || "Unknown device";
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      "Unknown";
+    const time =
+      new Date().toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        dateStyle: "medium",
+        timeStyle: "short",
+      }) + " IST";
+
+    await sendEmail({
+      to: user.email,
+      ...loginAlertEmail({ fullName: user.fullName, time, device, ip }),
+    });
 
     return success({
       user: {
