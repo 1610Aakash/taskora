@@ -25,5 +25,16 @@ export function useAdminProjectDetailsViewModel(projectId) {
     };
   }, [projectId]);
 
-  return { project, tasks, loading, error };
+  const refresh = async () => {
+    try {
+      const data = await getProjectDetailsRequest(projectId);
+      setProject(data.project);
+      setTasks(data.tasks);
+      setError("");
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  return { project, tasks, loading, error, refresh };
 }
