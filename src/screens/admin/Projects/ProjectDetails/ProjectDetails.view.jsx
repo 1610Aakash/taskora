@@ -1,14 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { Loader2, Pencil, CalendarDays } from "lucide-react";
+import { useState } from "react";
+import { CalendarDays, Loader2, Pencil, Sparkles } from "lucide-react";
 import StatusBadge from "@/components/common/StatusBadge";
 import ProjectTaskList from "./components/ProjectTaskList";
+import AiTaskBreakdownDialog from "./components/AiTaskBreakdownDialog";
 import { useAdminProjectDetailsViewModel } from "./ProjectDetails.viewmodel";
 
 export default function AdminProjectDetailsView({ projectId }) {
-  const { project, tasks, loading, error } =
+  const { project, tasks, loading, error, refresh } =
     useAdminProjectDetailsViewModel(projectId);
+  const [breakdownOpen, setBreakdownOpen] = useState(false);
 
   if (loading) {
     return (
@@ -22,7 +25,9 @@ export default function AdminProjectDetailsView({ projectId }) {
     return <p className="py-16 text-center text-sm text-danger">{error}</p>;
   }
 
-  const pct = Math.round((project.completedCount / project.taskCount) * 100);
+  const pct = project.taskCount
+    ? Math.round((project.completedCount / project.taskCount) * 100)
+    : 0;
 
   return (
     <div className="space-y-6">
@@ -72,11 +77,29 @@ export default function AdminProjectDetailsView({ projectId }) {
       </div>
 
       <div>
-        <h2 className="mb-3 text-sm font-semibold text-foreground">
-          Tasks in this project
-        </h2>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-sm font-semibold text-foreground">
+            Tasks in this project
+          </h2>
+          <button
+            type="button"
+            onClick={() => setBreakdownOpen(true)}
+            className="inline-flex items-center gap-2 rounded-lg border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            <Sparkles className="h-4 w-4" />
+            Break Down with AI
+          </button>
+        </div>
         <ProjectTaskList tasks={tasks} />
       </div>
+
+      <AiTaskBreakdownDialog
+        key={project.id}
+        open={breakdownOpen}
+        onClose={() => setBreakdownOpen(false)}
+        project={project}
+        onSaved={refresh}
+      />
     </div>
   );
 }

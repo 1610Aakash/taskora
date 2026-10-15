@@ -19,6 +19,7 @@ Taskora solves a simple problem: an admin needs to hand out work, and a team nee
 - Create, view, and edit users; activate or deactivate accounts
 - Create, view, edit, and delete projects
 - Create, view, edit, and delete tasks — assign any task to any user, set priority, due date, and status
+- Generate, review, edit, assign, and save project task breakdown suggestions with Gemini
 - Dashboard with workspace-wide stats: total/active users, total projects, total/completed/overdue tasks
 - Role-scoped notifications (e.g. new user registered, task overdue, project completed)
 
@@ -117,7 +118,7 @@ To Do → In Progress → Completed
 ## Getting Started
 
 ### Prerequisites
-- Node.js 18+
+- Node.js 20+
 - A MongoDB database (local or [MongoDB Atlas](https://www.mongodb.com/atlas))
 
 ### Installation
@@ -138,7 +139,14 @@ JWT_SECRET=a-long-random-secret-string
 JWT_EXPIRES_IN=7d
 SEED_SECRET=a-temporary-secret-only-you-know
 NODE_ENV=development
+GEMINI_API_KEY=your_key_here
+GEMINI_MODEL=gemini-2.5-flash
+AI_BREAKDOWN_MAX_TASKS=12
 ```
+
+`GEMINI_API_KEY` is used only by the server and must never use a `NEXT_PUBLIC_` prefix. `GEMINI_MODEL` is optional and defaults to `gemini-2.5-flash`. Each breakdown defaults to eight suggestions. `AI_BREAKDOWN_MAX_TASKS` is optional and limits the selectable count from 5 to 12 (default maximum 12). Add these values to the Vercel project's Environment Variables for each environment where AI breakdowns should be enabled, then redeploy.
+
+AI task breakdowns require a Google Gemini API key and are disabled with a clear configuration message when the key is missing. Google controls free-tier availability and rate limits based on current policies and account eligibility; usage may be billed depending on the account and selected model. Taskora limits generation to four requests per user per 10-minute application instance window, and each generation has a 30-second timeout. AI results remain suggestions until an administrator reviews them, chooses assignees using the existing task assignment options, and saves selected tasks.
 
 ### Run the dev server
 

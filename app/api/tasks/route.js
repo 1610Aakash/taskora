@@ -3,7 +3,7 @@ import Task from "@/models/Task";
 import Project from "@/models/Project";
 import { requireAuth } from "@/lib/auth/requireAuth";
 import { success, error } from "@/lib/utils/apiResponse";
-import { notifyUser } from "@/lib/utils/notify";
+import { createTaskWithNotification } from "@/lib/tasks/createTaskWithNotification";
 
 export async function GET(request) {
   const {
@@ -57,10 +57,12 @@ export async function POST(request) {
 
     await connectDB();
 
-    const task = await Task.create({
+    const projectDoc = await Project.findById(project).select("name");
+    const { task, notificationSent } = await createTaskWithNotification({
       name,
       description,
       project,
+      projectName: projectDoc?.name,
       assignedUser,
       priority: priority || "medium",
       status: taskStatus || "todo",
@@ -68,16 +70,7 @@ export async function POST(request) {
       createdBy: user._id,
     });
 
-    const projectDoc = await Project.findById(project);
-    await notifyUser({
-      userId: assignedUser,
-      type: "task_assigned",
-      title: "New task assigned",
-      message: `You were assigned "${name}" on ${projectDoc?.name || "a project"}.`,
-      link: `/user/my-tasks/${task._id}`,
-    });
-
-    return success({ task }, 201);
+    return success({ task, notificationSent }, 201);
   } catch (err) {
     return error(err.message, 500);
   }
