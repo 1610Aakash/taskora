@@ -1,5 +1,10 @@
+import { AuthProvider } from "@/context/AuthContext";
 import AdminShell from "@/components/layout/AdminShell";
 
 export default function AdminLayout({ children }) {
-  return <AdminShell>{children}</AdminShell>;
+  return (
+    <AuthProvider>
+      <AdminShell>{children}</AdminShell>
+    </AuthProvider>
+  );
 }

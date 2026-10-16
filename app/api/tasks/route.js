@@ -18,6 +18,14 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const projectId = searchParams.get("projectId");
   const mine = searchParams.get("mine");
+  const rawLimit = searchParams.get("limit");
+  let limit;
+  if (rawLimit !== null) {
+    limit = Number(rawLimit);
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100) {
+      return error("Limit must be an integer between 1 and 100.");
+    }
+  }
 
   const query = {};
   if (projectId) {
@@ -27,10 +35,12 @@ export async function GET(request) {
   }
   // admin with no filters: sees every task across every project
 
-  const tasks = await Task.find(query)
+  const tasksQuery = Task.find(query)
     .populate("project", "name")
     .populate("assignedUser", "fullName")
     .sort({ createdAt: -1 });
+  if (limit) tasksQuery.limit(limit);
+  const tasks = await tasksQuery.lean();
 
   return success({ tasks });
 }
