@@ -3,8 +3,8 @@ import { normalizeProject, normalizeTask } from "@/lib/utils/normalize";
 
 export async function getDashboardDataRequest() {
   const [projectsRes, tasksRes] = await Promise.all([
-    apiGet("/projects"),
-    apiGet("/tasks?mine=true"),
+    apiGet("/projects?limit=3"),
+    apiGet("/tasks?mine=true&limit=4"),
   ]);
   return {
     recentProjects: projectsRes.projects.slice(0, 3).map(normalizeProject),

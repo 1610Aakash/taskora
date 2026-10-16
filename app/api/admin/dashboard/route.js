@@ -4,6 +4,7 @@ import Project from "@/models/Project";
 import Task from "@/models/Task";
 import { requireAuth } from "@/lib/auth/requireAuth";
 import { success, error } from "@/lib/utils/apiResponse";
+import { getProjectTaskCounts } from "@/lib/projects/getProjectTaskCounts";
 
 export async function GET() {
   const { error: authError, status } = await requireAuth(["admin"]);
@@ -11,54 +12,88 @@ export async function GET() {
 
   await connectDB();
 
+  const now = new Date();
   const [
     totalUsers,
     activeUsers,
     totalProjects,
-    allTasks,
+    taskStats,
+    recentTasks,
     projects,
     recentUsers,
   ] = await Promise.all([
     User.countDocuments(),
     User.countDocuments({ status: "active" }),
     Project.countDocuments(),
+    Task.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalTasks: { $sum: 1 },
+          completedTasks: {
+            $sum: { $cond: [{ $eq: ["$status", "completed"] }, 1, 0] },
+          },
+          overdueTasks: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $ne: ["$status", "completed"] },
+                    { $lt: ["$dueDate", now] },
+                  ],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+    ]),
     Task.find()
+      .select(
+        "_id name description project assignedUser priority status dueDate createdAt updatedAt",
+      )
       .populate("project", "name")
       .populate("assignedUser", "fullName")
-      .sort({ createdAt: -1 }),
+      .sort({ createdAt: -1 })
+      .limit(4)
+      .lean(),
     Project.find().sort({ createdAt: -1 }).limit(3).lean(),
-    User.find().sort({ createdAt: -1 }).limit(4),
+    User.find()
+      .select("fullName email role status phone avatarUrl createdAt")
+      .sort({ createdAt: -1 })
+      .limit(4)
+      .lean(),
   ]);
 
-  const completedTasks = allTasks.filter(
-    (t) => t.status === "completed",
-  ).length;
-  const overdueTasks = allTasks.filter(
-    (t) => t.status !== "completed" && new Date(t.dueDate) < new Date(),
-  ).length;
+  const {
+    totalTasks = 0,
+    completedTasks = 0,
+    overdueTasks = 0,
+  } = taskStats[0] || {};
 
-  const recentProjects = await Promise.all(
-    projects.map(async (p) => {
-      const taskCount = await Task.countDocuments({ project: p._id });
-      const completedCount = await Task.countDocuments({
-        project: p._id,
-        status: "completed",
-      });
-      return { ...p, taskCount, completedCount };
-    }),
+  const countsByProject = await getProjectTaskCounts(
+    projects.map((project) => project._id),
   );
+  const recentProjects = projects.map((project) => ({
+    ...project,
+    taskCount: countsByProject[project._id.toString()]?.taskCount ?? 0,
+    completedCount:
+      countsByProject[project._id.toString()]?.completedCount ?? 0,
+  }));
 
   return success({
     stats: {
       totalUsers,
       activeUsers,
       totalProjects,
-      totalTasks: allTasks.length,
+      totalTasks,
       completedTasks,
       overdueTasks,
     },
     recentProjects,
-    recentTasks: allTasks.slice(0, 4),
+    recentTasks,
     recentUsers,
   });
 }

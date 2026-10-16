@@ -11,9 +11,9 @@ import { apiGet, apiPost } from "@/lib/api/client";
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
+export function AuthProvider({ children, loadOnMount = true }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(loadOnMount);
 
   const refreshUser = useCallback(async () => {
     try {
@@ -27,9 +27,11 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    const timeout = setTimeout(() => refreshUser(), 0);
+    if (!loadOnMount) return;
+
+    const timeout = setTimeout(refreshUser, 0);
     return () => clearTimeout(timeout);
-  }, [refreshUser]);
+  }, [loadOnMount, refreshUser]);
 
   const logout = useCallback(async () => {
     await apiPost("/auth/logout", {});

@@ -3,6 +3,7 @@ import Project from "@/models/Project";
 import Task from "@/models/Task";
 import { requireAuth } from "@/lib/auth/requireAuth";
 import { success, error } from "@/lib/utils/apiResponse";
+import { getProjectTaskCounts } from "@/lib/projects/getProjectTaskCounts";
 
 export async function GET(request, { params }) {
   const {
@@ -27,13 +28,15 @@ export async function GET(request, { params }) {
       return error("You do not have access to this project.", 403);
   }
 
-  const taskCount = await Task.countDocuments({ project: projectId });
-  const completedCount = await Task.countDocuments({
-    project: projectId,
-    status: "completed",
-  });
+  const counts = await getProjectTaskCounts([project._id]);
 
-  return success({ project: { ...project, taskCount, completedCount } });
+  return success({
+    project: {
+      ...project,
+      taskCount: counts[project._id.toString()]?.taskCount ?? 0,
+      completedCount: counts[project._id.toString()]?.completedCount ?? 0,
+    },
+  });
 }
 
 export async function PATCH(request, { params }) {

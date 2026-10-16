@@ -159,6 +159,18 @@ npm run dev
 
 The app runs at [http://localhost:3000](http://localhost:3000).
 
+### Performance indexes
+
+Task and project schemas declare indexes used by the project/task lists and recent-item sorting. Create them once in the production MongoDB database before deploying the optimized version; `createIndex` is idempotent:
+
+```javascript
+db.tasks.createIndex({ createdAt: -1 });
+db.tasks.createIndex({ project: 1, createdAt: -1 });
+db.tasks.createIndex({ project: 1, status: 1 });
+db.tasks.createIndex({ assignedUser: 1, createdAt: -1 });
+db.projects.createIndex({ createdAt: -1 });
+```
+
 ### Create the admin account
 
 Taskora has exactly one admin, created once via a protected seed endpoint (not through the public sign-up flow):

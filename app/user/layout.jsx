@@ -1,5 +1,10 @@
+import { AuthProvider } from "@/context/AuthContext";
 import UserShell from "@/components/layout/UserShell";
 
 export default function UserLayout({ children }) {
-  return <UserShell>{children}</UserShell>;
+  return (
+    <AuthProvider>
+      <UserShell>{children}</UserShell>
+    </AuthProvider>
+  );
 }

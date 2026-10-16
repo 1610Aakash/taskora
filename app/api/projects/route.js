@@ -3,8 +3,9 @@ import Project from "@/models/Project";
 import Task from "@/models/Task";
 import { requireAuth } from "@/lib/auth/requireAuth";
 import { success, error } from "@/lib/utils/apiResponse";
+import { getProjectTaskCounts } from "@/lib/projects/getProjectTaskCounts";
 
-export async function GET() {
+export async function GET(request) {
   const {
     user,
     error: authError,
@@ -13,6 +14,16 @@ export async function GET() {
   if (authError) return error(authError, status);
 
   await connectDB();
+
+  const { searchParams } = new URL(request.url);
+  const rawLimit = searchParams.get("limit");
+  let limit;
+  if (rawLimit !== null) {
+    limit = Number(rawLimit);
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100) {
+      return error("Limit must be an integer between 1 and 100.");
+    }
+  }
 
   let query = {};
 
@@ -25,18 +36,19 @@ export async function GET() {
   }
   // admin: no filter — sees every project
 
-  const projects = await Project.find(query).sort({ createdAt: -1 }).lean();
+  const projectsQuery = Project.find(query).sort({ createdAt: -1 });
+  if (limit) projectsQuery.limit(limit);
+  const projects = await projectsQuery.lean();
 
-  const withCounts = await Promise.all(
-    projects.map(async (p) => {
-      const taskCount = await Task.countDocuments({ project: p._id });
-      const completedCount = await Task.countDocuments({
-        project: p._id,
-        status: "completed",
-      });
-      return { ...p, taskCount, completedCount };
-    }),
+  const countsByProject = await getProjectTaskCounts(
+    projects.map((project) => project._id),
   );
+  const withCounts = projects.map((project) => ({
+    ...project,
+    taskCount: countsByProject[project._id.toString()]?.taskCount ?? 0,
+    completedCount:
+      countsByProject[project._id.toString()]?.completedCount ?? 0,
+  }));
 
   return success({ projects: withCounts });
 }
