@@ -35,6 +35,7 @@ Taskora solves a simple problem: an admin needs to hand out work, and a team nee
 ### Shared
 - Landing page, login, forgot password, reset password, email verification, account setup
 - Profile view and edit, change password
+- Ask Taskora AI: read-only answers about authorized tasks and projects
 - Fully responsive, dark-themed UI
 
 ---
@@ -147,6 +148,8 @@ AI_BREAKDOWN_MAX_TASKS=12
 `GEMINI_API_KEY` is used only by the server and must never use a `NEXT_PUBLIC_` prefix. `GEMINI_MODEL` is optional and defaults to `gemini-2.5-flash`. Each breakdown defaults to eight suggestions. `AI_BREAKDOWN_MAX_TASKS` is optional and limits the selectable count from 5 to 12 (default maximum 12). Add these values to the Vercel project's Environment Variables for each environment where AI breakdowns should be enabled, then redeploy.
 
 AI task breakdowns require a Google Gemini API key and are disabled with a clear configuration message when the key is missing. Google controls free-tier availability and rate limits based on current policies and account eligibility; usage may be billed depending on the account and selected model. Taskora limits generation to four requests per user per 10-minute application instance window, and each generation has a 30-second timeout. AI results remain suggestions until an administrator reviews them, chooses assignees using the existing task assignment options, and saves selected tasks.
+
+Ask Taskora AI reuses `GEMINI_API_KEY` and `GEMINI_MODEL`. It is read-only: admins receive the same workspace-wide task access as the existing task API; regular users' personal-task questions use only their assigned tasks, while project summaries and project-attention answers use projects where they have an assignment-derived membership (matching the existing project view). Counts are computed in MongoDB; due-date day and week boundaries use UTC (weeks begin Monday). Assistant requests are limited to 12 per user per 10-minute server instance window. This lightweight in-memory limit is per server instance and is not a global quota across Vercel instances; use a shared rate-limit store if a deployment-wide limit is required.
 
 ### Run the dev server
 
