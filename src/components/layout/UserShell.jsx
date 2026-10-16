@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   FolderKanban,
   ListChecks,
+  Sparkles,
   Bell,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
@@ -16,6 +17,7 @@ const NAV_ITEMS = [
   { href: "/user/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/user/projects", label: "Projects", icon: FolderKanban },
   { href: "/user/my-tasks", label: "My Tasks", icon: ListChecks },
+  { href: "/user/assistant", label: "Ask Taskora AI", icon: Sparkles },
   { href: "/notifications", label: "Notifications", icon: Bell },
 ];
 

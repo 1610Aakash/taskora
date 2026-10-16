@@ -7,6 +7,7 @@ import {
   Users,
   FolderKanban,
   ListChecks,
+  Sparkles,
   Bell,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
@@ -18,6 +19,7 @@ const NAV_ITEMS = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/projects", label: "Projects", icon: FolderKanban },
   { href: "/admin/tasks", label: "Tasks", icon: ListChecks },
+  { href: "/admin/assistant", label: "Ask Taskora AI", icon: Sparkles },
   { href: "/notifications", label: "Notifications", icon: Bell },
 ];
 
@@ -61,7 +63,9 @@ export default function AdminShell({ children }) {
       </aside>
 
       <nav className="fixed inset-x-3 bottom-3 z-30 flex items-center justify-around rounded-2xl border border-border bg-card/95 p-2 shadow-2xl backdrop-blur-xl md:hidden">
-        {NAV_ITEMS.slice(0, 4).map(({ href, label, icon: Icon }) => {
+        {NAV_ITEMS.filter(
+          ({ href }) => href !== "/admin/users" && href !== "/notifications",
+        ).map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(`${href}/`);
           return <Link key={href} href={href} aria-label={label} className={`rounded-xl p-3 ${active ? "bg-primary/15 text-primary" : "text-muted"}`}><Icon className="h-5 w-5" /></Link>;
         })}
